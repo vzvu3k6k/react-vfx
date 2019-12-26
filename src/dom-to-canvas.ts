@@ -55,7 +55,7 @@ export default function getCanvasFromElement(
     const xml = convertHtmlToXml(html);
     const svg =
         `<svg xmlns="http://www.w3.org/2000/svg">` +
-        `<foreignObject width="100%" height="100%">${xml}</foreignObject></svg>`;
+        `<foreignObject width=${canvas.width} height=${canvas.height}>${xml}</foreignObject></svg>`;
 
     return new Promise((resolve, reject) => {
         const img = new Image();
