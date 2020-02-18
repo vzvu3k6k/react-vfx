@@ -15,6 +15,7 @@ function VFXElementFactory<T extends keyof JSX.IntrinsicElements>(
     ) => {
         const player = useContext(VFXContext);
         const ref = useRef<HTMLElement>(null);
+        const elementDidAdd = useRef<boolean>(false);
 
         // Create scene
         useEffect(() => {
@@ -24,7 +25,9 @@ function VFXElementFactory<T extends keyof JSX.IntrinsicElements>(
             }
 
             const shader = props.shader;
-            player?.addElement(element, { shader });
+            player?.addElement(element, { shader })?.then(() => {
+                elementDidAdd.current = true;
+            });
 
             return () => {
                 player?.removeElement(element);
@@ -33,7 +36,7 @@ function VFXElementFactory<T extends keyof JSX.IntrinsicElements>(
 
         // Rerender if the content is updated
         useEffect(() => {
-            if (ref.current === null) {
+            if (ref.current === null || elementDidAdd.current === false) {
                 return;
             }
 
